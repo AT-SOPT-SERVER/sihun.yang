@@ -32,4 +32,8 @@ public class PostService {
         post.setTitle(newTitle);
         return true;
     }
+
+    public List<Post> searchPostsByKeyword(String keyword) {
+        return postRepository.findByKeyword(keyword);
+    }
 }

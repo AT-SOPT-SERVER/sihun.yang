@@ -32,5 +32,7 @@ public class PostController {
         return postService.updatePostTitle(id, newTitle);
     }
 
-
+    public List<Post> searchPostsByKeyword(String keyword) {
+        return postService.searchPostsByKeyword(keyword);
+    }
 }

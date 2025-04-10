@@ -28,4 +28,13 @@ public class PostRepository {
         return postList.removeIf(post -> post.getId() == id);
     }
 
+    public List<Post> findByKeyword(String keyword) {
+        List<Post> results = new ArrayList<>();
+        for (Post post : postList) {
+            if (post.getTitle().contains(keyword)) {
+                results.add(post);
+            }
+        }
+        return results;
+    }
 }
