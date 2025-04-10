@@ -37,4 +37,8 @@ public class PostRepository {
         }
         return results;
     }
+
+    public boolean existsByTitle(String title) {
+        return postList.stream().anyMatch(post -> post.getTitle().equals(title));
+    }
 }

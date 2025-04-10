@@ -9,6 +9,9 @@ public class PostService {
     private final PostRepository postRepository = new PostRepository();
 
     public void createPost(Post post) {
+        if(postRepository.existsByTitle(post.getTitle())) {
+            throw new IllegalArgumentException("이미 존재하는 제목입니다.");
+        }
         postRepository.save(post);
     }
 
@@ -36,4 +39,5 @@ public class PostService {
     public List<Post> searchPostsByKeyword(String keyword) {
         return postRepository.findByKeyword(keyword);
     }
+
 }
