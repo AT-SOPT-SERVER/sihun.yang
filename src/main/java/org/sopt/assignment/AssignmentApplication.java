@@ -23,9 +23,12 @@ public class AssignmentApplication {
                     System.out.println("\n📝 [게시글 작성]");
                     System.out.print("📌 제목을 입력해주세요: ");
                     String title = scanner.nextLine();
-                    controller.createPost(title);
-                    System.out.println("✅ 게시글이 성공적으로 저장되었습니다!");
-                    break;
+                    try {
+                        controller.createPost(title);
+                        System.out.println("✅ 게시글이 성공적으로 저장되었습니다!");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("❌ 오류: " + e.getMessage());
+                    }
 
                 case "2":
                     System.out.println("\n📚 [전체 게시글 조회]");
