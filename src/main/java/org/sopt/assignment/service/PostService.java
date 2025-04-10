@@ -26,13 +26,10 @@ public class PostService {
 
     public boolean updatePostTitle(int id, String newTitle) {
         Post post = postRepository.findById(id);
-        if (post == null) return false;
-
+        if (post == null) {
+            return false;
+        }
         post.setTitle(newTitle);
         return true;
-    }
-
-    public List<Post> searchPostsByKeyword(String keyword) {
-        return postRepository.findByKeyword(keyword);
     }
 }

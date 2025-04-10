@@ -1,8 +1,5 @@
 package org.sopt.assignment;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import java.util.List;
 import java.util.Scanner;
 import org.sopt.assignment.controller.PostController;
