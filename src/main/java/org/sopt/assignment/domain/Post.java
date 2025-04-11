@@ -19,7 +19,7 @@ public class Post {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void updateTitle(String title) {
         validateTitle(title);
         this.title = title;
     }

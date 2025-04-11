@@ -45,7 +45,7 @@ public class PostService {
         if (post == null) {
             return false;
         }
-        post.setTitle(newTitle);
+        post.updateTitle(newTitle);
         return true;
     }
 
