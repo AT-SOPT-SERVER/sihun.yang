@@ -3,34 +3,32 @@ package org.sopt.assignment.repository;
 import org.sopt.assignment.domain.Post;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PostRepository {
-    List<Post> postList = new ArrayList<>();
+    private final Map<Long, Post> postMap = new HashMap<>();
 
     public void save(Post post) {
-        postList.add(post);
+        postMap.put(post.getId(), post);
     }
 
     public List<Post> findAll() {
-        return postList;
+        return new ArrayList<>(postMap.values());
     }
 
-    public Post findById(int id) {
-        for (Post post : postList) {
-            if (post.getId() == id)
-                return post;
-        }
-        return null;
+    public Post findById(long id) {
+        return postMap.get(id);
     }
 
-    public boolean deleteById(int id) {
-        return postList.removeIf(post -> post.getId() == id);
+    public boolean deleteById(long id) {
+        return postMap.remove(id) != null;
     }
 
     public List<Post> findByKeyword(String keyword) {
         List<Post> results = new ArrayList<>();
-        for (Post post : postList) {
+        for (Post post : postMap.values()) {
             if (post.getTitle().contains(keyword)) {
                 results.add(post);
             }
@@ -39,6 +37,7 @@ public class PostRepository {
     }
 
     public boolean existsByTitle(String title) {
-        return postList.stream().anyMatch(post -> post.getTitle().equals(title));
+        return postMap.values().stream()
+                .anyMatch(post -> post.getTitle().equals(title));
     }
 }

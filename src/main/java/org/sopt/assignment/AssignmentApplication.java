@@ -41,7 +41,7 @@ public class AssignmentApplication {
                 case "3":
                     System.out.println("\n🔍 [게시글 상세 조회]");
                     System.out.print("📌 조회할 게시글 ID를 입력해주세요: ");
-                    int id = Integer.parseInt(scanner.nextLine());
+                    long id = Long.parseLong(scanner.nextLine());
                     Post found = controller.getPostById(id);
                     if (found != null) {
                         System.out.println("📄 게시글 상세 내용:");
@@ -57,7 +57,7 @@ public class AssignmentApplication {
                 case "4":
                     System.out.println("\n✏️ [게시글 수정]");
                     System.out.print("📌 수정할 게시글 ID를 입력해주세요: ");
-                    int updateId = Integer.parseInt(scanner.nextLine());
+                    long updateId = Long.parseLong(scanner.nextLine());
                     System.out.print("📝 새 제목을 입력해주세요: ");
                     String newTitle = scanner.nextLine();
 

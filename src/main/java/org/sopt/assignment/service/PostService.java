@@ -32,15 +32,15 @@ public class PostService {
         return postRepository.findAll();
     }
 
-    public Post getPostById(int id) {
+    public Post getPostById(long id) {
         return postRepository.findById(id);
     }
 
-    public boolean deletePostById(int id) {
+    public boolean deletePostById(long id) {
         return postRepository.deleteById(id);
     }
 
-    public boolean updatePostTitle(int id, String newTitle) {
+    public boolean updatePostTitle(long id, String newTitle) {
         Post post = postRepository.findById(id);
         if (post == null) {
             return false;

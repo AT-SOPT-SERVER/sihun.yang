@@ -20,15 +20,15 @@ public class PostController {
         return postService.getAllPosts();
     }
 
-    public Post getPostById(int id) {
+    public Post getPostById(long id) {
         return postService.getPostById(id);
     }
 
-    public boolean deletePostById(int id) {
+    public boolean deletePostById(long id) {
         return postService.deletePostById(id);
     }
 
-    public boolean updatePostTitle(int id, String newTitle) {
+    public boolean updatePostTitle(long id, String newTitle) {
         return postService.updatePostTitle(id, newTitle);
     }
 

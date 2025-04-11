@@ -1,17 +1,17 @@
 package org.sopt.assignment.domain;
 
 public class Post {
-    private int id;
+    private long id;
 
     private String title;
 
-    public Post(int id, String title) {
+    public Post(long id, String title) {
         validateTitle(title);
         this.id = id;
         this.title = title;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
