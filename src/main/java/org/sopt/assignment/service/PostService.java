@@ -1,5 +1,6 @@
 package org.sopt.assignment.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.sopt.assignment.domain.Post;
 import org.sopt.assignment.dto.PostResponse;
 import org.sopt.assignment.repository.PostRepository;
@@ -62,5 +63,14 @@ public class PostService {
         postRepository.delete(post);
     }
 
+    //게시글 검색
+    @Transactional(readOnly = true)
+    public List<Post> searchPostsByKeyword(String keyword) {
+        List<Post> result = postRepository.searchByKeyword(keyword);
+        if (result.isEmpty()) {
+            throw new EntityNotFoundException("해당 키워드의 게시글이 없습니다.");
+        }
+        return result;
+    }
 
 }
