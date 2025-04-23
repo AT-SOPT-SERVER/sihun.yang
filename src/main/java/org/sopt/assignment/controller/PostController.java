@@ -43,6 +43,21 @@ public class PostController {
                 .status(HttpStatus.OK)
                 .body(new ApiResponse<>(HttpStatus.OK.value(), "게시글이 수정되었습니다.", updated));
     }
+
+    // 전체 게시글 조회
+    @GetMapping("/contents")
+    public ResponseEntity<ApiResponse<PostRetrieveResponse>> getAllPosts() {
+        List<PostResponse> posts = postService.getAllPosts().stream()
+                .map(post -> new PostResponse(post.getId(), post.getTitle()))
+                .toList();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ApiResponse<>(
+                        HttpStatus.OK.value(),
+                        "전체 게시글이 조회되었습니다.",
+                        new PostRetrieveResponse(posts)
+                ));
+    }
     }
 
 
