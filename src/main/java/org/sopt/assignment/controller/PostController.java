@@ -58,6 +58,30 @@ public class PostController {
                         new PostRetrieveResponse(posts)
                 ));
     }
+
+    // 게시글 상세 조회
+    @GetMapping("/contents/{contentId}")
+    public ResponseEntity<ApiResponse<PostResponse>> getPostById(@PathVariable final Long contentId) {
+        PostResponse post = postService.getPostDetail(contentId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ApiResponse<>(
+                        HttpStatus.OK.value(),
+                        "게시글 상세 조회",
+                        post
+                ));
+    }
+
+    //게시글 삭제
+    @DeleteMapping("/contents/{contentId}")
+    public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable final Long contentId) {
+        postService.deletePostById(contentId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ApiResponse<>(HttpStatus.OK.value(), "게시글이 삭제되었습니다.", null));
+    }
+
+
     }
 
 

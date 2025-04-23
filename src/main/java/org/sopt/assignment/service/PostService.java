@@ -43,12 +43,24 @@ public class PostService {
     //게시글 수정
     @Transactional
     public PostResponse updatePostTitle(Long id, String newTitle) {
-        Post post = getPostById(id); // 존재하지 않으면 예외 발생
+        Post post = getPostById(id);
         post.updateTitle(newTitle);
         return new PostResponse(post.getId(), post.getTitle());
     }
 
+    // 게시글 상세 조회
+    @Transactional(readOnly = true)
+    public PostResponse getPostDetail(Long id) {
+        Post post = getPostById(id);
+        return new PostResponse(post.getId(), post.getTitle());
+    }
 
+    //게시글 삭제
+    @Transactional
+    public void deletePostById(Long id) {
+        Post post = getPostById(id);
+        postRepository.delete(post);
+    }
 
 
 }
