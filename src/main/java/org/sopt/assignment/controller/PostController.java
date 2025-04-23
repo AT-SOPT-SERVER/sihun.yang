@@ -1,38 +1,28 @@
 package org.sopt.assignment.controller;
 
 import org.sopt.assignment.domain.Post;
+import org.sopt.assignment.dto.PostRequest;
 import org.sopt.assignment.service.PostService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
+@RequestMapping("/posts")
 public class PostController {
-    private PostService postService  =  new PostService();
 
-    private int postId = 1;
+    private final PostService postService;
 
-
-   public void createPost(String title){
-        Post post = new Post(postId++, title);
-        postService.createPost(post);
+    public PostController(PostService postService) {
+        this.postService = postService;
     }
 
-    public List<Post> getAllPosts(){
-        return postService.getAllPosts();
+    // 게시글 생성
+    @PostMapping
+    public ResponseEntity<Void> createPost(@RequestBody final PostRequest postRequest) {
+        postService.createPost(postRequest.getTitle());
+        return ResponseEntity.ok().build();
     }
 
-    public Post getPostById(long id) {
-        return postService.getPostById(id);
-    }
-
-    public boolean deletePostById(long id) {
-        return postService.deletePostById(id);
-    }
-
-    public boolean updatePostTitle(long id, String newTitle) {
-        return postService.updatePostTitle(id, newTitle);
-    }
-
-    public List<Post> searchPostsByKeyword(String keyword) {
-        return postService.searchPostsByKeyword(keyword);
-    }
 }

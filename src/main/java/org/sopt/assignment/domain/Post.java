@@ -1,35 +1,34 @@
 package org.sopt.assignment.domain;
 
-public class Post {
-    private long id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity
+public class Post {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String title;
 
-    public Post(long id, String title) {
-        validateTitle(title);
-        this.id = id;
+    public Post() {
+
+    }
+
+    public Post(String title) {
         this.title = title;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
-    public void updateTitle(String title) {
-        validateTitle(title);
-        this.title = title;
+    public void updateTitle(String newTitle) {
+        this.title = newTitle;
     }
-    private void validateTitle(String title) {
-        if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("제목을 입력해주세요!");
-        }
-        if (title.length() > 30) {
-            throw new IllegalArgumentException("제목은 30자 이내로 작성해야 합니다!");
-        }
-    }
-
 }
