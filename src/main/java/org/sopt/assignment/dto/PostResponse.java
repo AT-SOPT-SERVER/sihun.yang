@@ -1,4 +1,3 @@
 package org.sopt.assignment.dto;
 
-public class PostResponse {
-}
+public record PostResponse(Long contentId, String title) {}
