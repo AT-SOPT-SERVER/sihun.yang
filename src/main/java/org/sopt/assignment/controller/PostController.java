@@ -1,7 +1,6 @@
 package org.sopt.assignment.controller;
 
-import org.sopt.assignment.dto.PostContentResponse;
-import org.sopt.assignment.dto.PostRequest;
+import org.sopt.assignment.dto.*;
 import org.sopt.assignment.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +20,29 @@ public class PostController {
 
     // 게시글 작성
     @PostMapping("/contents")
-    public ResponseEntity<PostContentResponse> createPost(@RequestBody final PostRequest postRequest) {
+    public ResponseEntity<ApiResponse<PostCreateResponse>> createPost(@RequestBody final PostRequest postRequest) {
         Long contentId = postService.createPost(postRequest.title());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new PostContentResponse(contentId));
+                .body(new ApiResponse<>(
+                        HttpStatus.CREATED.value(),
+                        "게시글이 작성되었습니다.",
+                        new PostCreateResponse(contentId)
+                ));
     }
 
 
-}
+    // 게시글 수정
+    @PatchMapping("/contents/{contentId}")
+    public ResponseEntity<ApiResponse<PostResponse>> updatePost(
+            @PathVariable final Long contentId,
+            @RequestBody final PostUpdateRequest request
+    ) {
+        PostResponse updated = postService.updatePostTitle(contentId, request.title());
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ApiResponse<>(HttpStatus.OK.value(), "게시글이 수정되었습니다.", updated));
+    }
+    }
+
+
