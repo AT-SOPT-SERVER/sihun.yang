@@ -32,16 +32,6 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handleGeneralException(Exception e) {
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ApiResponse<>(
-                        HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                        "서버 내부 오류가 발생했습니다.",
-                        null
-                ));
-    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Void>> handleValidation(MethodArgumentNotValidException e) {
         String errorMessage = e.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
@@ -51,4 +41,5 @@ public class GlobalExceptionHandler {
                 null
         ));
 
+    }
 }

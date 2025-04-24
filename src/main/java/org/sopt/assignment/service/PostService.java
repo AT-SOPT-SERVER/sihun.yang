@@ -3,6 +3,7 @@ package org.sopt.assignment.service;
 import jakarta.persistence.EntityNotFoundException;
 import org.sopt.assignment.domain.Post;
 import org.sopt.assignment.dto.PostResponse;
+import org.sopt.assignment.exception.ErrorMessage;
 import org.sopt.assignment.repository.PostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ public class PostService {
     // 하나의 게시글 조회
     public Post getPostById(Long id) {
         return postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 게시글이 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.POST_NOT_FOUND.getMessage()));
     }
 
     // 게시글 전체 조회
@@ -36,7 +37,7 @@ public class PostService {
     public Long createPost(String title) {
         // 중복 제목 검사
         if (postRepository.existsByTitle(title)) {
-            throw new IllegalArgumentException("이미 존재하는 제목입니다.");
+            throw new IllegalArgumentException(ErrorMessage.DUPLICATE_TITLE.getMessage());
         }
 
         // 도배 방지
@@ -44,7 +45,7 @@ public class PostService {
         if (latest != null) {
             Duration duration = Duration.between(latest.getCreatedAt(), LocalDateTime.now());
             if (duration.getSeconds() < 180) {
-                throw new IllegalArgumentException("3분 이내에는 게시글을 다시 작성할 수 없습니다.");
+                throw new IllegalArgumentException(ErrorMessage.SPAM_LIMIT.getMessage());
             }
         }
         Post saved = postRepository.save(new Post(title));
@@ -78,7 +79,7 @@ public class PostService {
     public List<Post> searchPostsByKeyword(String keyword) {
         List<Post> result = postRepository.searchByKeyword(keyword);
         if (result.isEmpty()) {
-            throw new EntityNotFoundException("해당 키워드의 게시글이 없습니다.");
+            throw new EntityNotFoundException(ErrorMessage.KEYWORD_NOT_FOUND.getMessage());
         }
         return result;
     }
