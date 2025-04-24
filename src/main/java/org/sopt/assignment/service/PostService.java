@@ -7,6 +7,7 @@ import org.sopt.assignment.repository.PostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,7 +15,6 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
-    private LocalDateTime lastCreatedAt = null;
 
     public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
@@ -34,10 +34,20 @@ public class PostService {
     // 게시글 작성
     @Transactional
     public Long createPost(String title) {
-        LocalDateTime now = LocalDateTime.now();
+        // 중복 제목 검사
+        if (postRepository.existsByTitle(title)) {
+            throw new IllegalArgumentException("이미 존재하는 제목입니다.");
+        }
 
+        // 도배 방지
+        Post latest = postRepository.findTopByOrderByCreatedAtDesc();
+        if (latest != null) {
+            Duration duration = Duration.between(latest.getCreatedAt(), LocalDateTime.now());
+            if (duration.getSeconds() < 180) {
+                throw new IllegalArgumentException("3분 이내에는 게시글을 다시 작성할 수 없습니다.");
+            }
+        }
         Post saved = postRepository.save(new Post(title));
-        lastCreatedAt = now;
         return saved.getId();
     }
 

@@ -13,4 +13,8 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p FROM Post p WHERE p.title LIKE %:keyword%")
     List<Post> searchByKeyword(@Param("keyword") String keyword);
+
+    boolean existsByTitle(String title); // 중복 제목 체크
+
+    Post findTopByOrderByCreatedAtDesc(); // 가장 최근 게시글 조회
 }
