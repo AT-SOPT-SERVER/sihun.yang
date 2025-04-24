@@ -79,6 +79,10 @@ public class PostService {
     @Transactional(readOnly = true)
     public List<Post> searchPostsByKeyword(String keyword) {
         List<Post> result = postRepository.searchByKeyword(keyword);
+
+        System.out.println("검색 키워드: " + keyword);
+        System.out.println("검색 결과 개수: " + result.size());
+
         if (result.isEmpty()) {
             throw new EntityNotFoundException(ErrorMessage.KEYWORD_NOT_FOUND.getMessage());
         }

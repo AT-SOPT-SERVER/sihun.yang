@@ -1,10 +1,10 @@
 package org.sopt.assignment.controller;
 
 import jakarta.validation.Valid;
+import org.sopt.assignment.dto.*;
 import org.sopt.assignment.dto.request.PostRequest;
 import org.sopt.assignment.dto.request.PostUpdateRequest;
 import org.sopt.assignment.dto.response.*;
-import org.sopt.assignment.dto.ApiResponse;
 import org.sopt.assignment.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -84,10 +84,11 @@ public class PostController {
                 .body(new ApiResponse<>(HttpStatus.OK.value(), "게시글이 삭제되었습니다.", null));
     }
 
-    // 게시글 검색
+    //게시글 검색
     @GetMapping("/contents/search")
     public ResponseEntity<ApiResponse<PostSearchResponse>> searchPostsByKeyword(
             @RequestParam final String keyword) {
+
         List<PostSearchItemResponse> results = postService.searchPostsByKeyword(keyword)
                 .stream()
                 .map(post -> new PostSearchItemResponse(post.getId(), post.getTitle()))
