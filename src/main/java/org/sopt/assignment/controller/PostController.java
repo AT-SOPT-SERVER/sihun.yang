@@ -1,5 +1,6 @@
 package org.sopt.assignment.controller;
 
+import jakarta.validation.Valid;
 import org.sopt.assignment.dto.*;
 import org.sopt.assignment.service.PostService;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class PostController {
 
     // 게시글 작성
     @PostMapping("/contents")
-    public ResponseEntity<ApiResponse<PostCreateResponse>> createPost(@RequestBody  final PostRequest postRequest) {
+    public ResponseEntity<ApiResponse<PostCreateResponse>> createPost(@RequestBody @Valid final PostRequest postRequest) {
         Long contentId = postService.createPost(postRequest.title());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -36,7 +37,7 @@ public class PostController {
     @PatchMapping("/contents/{contentId}")
     public ResponseEntity<ApiResponse<PostResponse>> updatePost(
             @PathVariable final Long contentId,
-            @RequestBody final PostUpdateRequest request
+            @RequestBody @Valid final PostUpdateRequest request
     ) {
         PostResponse updated = postService.updatePostTitle(contentId, request.title());
         return ResponseEntity
