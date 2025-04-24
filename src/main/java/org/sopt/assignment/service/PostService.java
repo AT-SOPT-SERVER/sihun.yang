@@ -2,7 +2,8 @@ package org.sopt.assignment.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.sopt.assignment.domain.Post;
-import org.sopt.assignment.dto.PostResponse;
+import org.sopt.assignment.dto.response.PostDetailResponse;
+import org.sopt.assignment.dto.response.PostUpdateResponse;
 import org.sopt.assignment.exception.ErrorMessage;
 import org.sopt.assignment.repository.PostRepository;
 import org.springframework.stereotype.Service;
@@ -52,19 +53,19 @@ public class PostService {
         return saved.getId();
     }
 
-    //게시글 수정
+    // 게시글 수정
     @Transactional
-    public PostResponse updatePostTitle(Long id, String newTitle) {
+    public PostUpdateResponse updatePostTitle(Long id, String newTitle) {
         Post post = getPostById(id);
         post.updateTitle(newTitle);
-        return new PostResponse(post.getId(), post.getTitle());
+        return new PostUpdateResponse(post.getId(), post.getTitle());
     }
 
     // 게시글 상세 조회
     @Transactional(readOnly = true)
-    public PostResponse getPostDetail(Long id) {
+    public PostDetailResponse getPostDetail(Long id) {
         Post post = getPostById(id);
-        return new PostResponse(post.getId(), post.getTitle());
+        return new PostDetailResponse(post.getId(), post.getTitle());
     }
 
     //게시글 삭제

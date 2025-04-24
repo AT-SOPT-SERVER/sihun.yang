@@ -1,7 +1,10 @@
 package org.sopt.assignment.controller;
 
 import jakarta.validation.Valid;
-import org.sopt.assignment.dto.*;
+import org.sopt.assignment.dto.request.PostRequest;
+import org.sopt.assignment.dto.request.PostUpdateRequest;
+import org.sopt.assignment.dto.response.*;
+import org.sopt.assignment.dto.ApiResponse;
 import org.sopt.assignment.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,14 +35,13 @@ public class PostController {
                 ));
     }
 
-
     // 게시글 수정
     @PatchMapping("/contents/{contentId}")
-    public ResponseEntity<ApiResponse<PostResponse>> updatePost(
+    public ResponseEntity<ApiResponse<PostUpdateResponse>> updatePost(
             @PathVariable final Long contentId,
             @RequestBody @Valid final PostUpdateRequest request
     ) {
-        PostResponse updated = postService.updatePostTitle(contentId, request.title());
+        PostUpdateResponse updated = postService.updatePostTitle(contentId, request.title());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ApiResponse<>(HttpStatus.OK.value(), "게시글이 수정되었습니다.", updated));
@@ -47,23 +49,23 @@ public class PostController {
 
     // 전체 게시글 조회
     @GetMapping("/contents")
-    public ResponseEntity<ApiResponse<PostRetrieveResponse>> getAllPosts() {
-        List<PostResponse> posts = postService.getAllPosts().stream()
-                .map(post -> new PostResponse(post.getId(), post.getTitle()))
+    public ResponseEntity<ApiResponse<PostListResponse>> getAllPosts() {
+        List<PostListItemResponse> posts = postService.getAllPosts().stream()
+                .map(post -> new PostListItemResponse(post.getId(), post.getTitle()))
                 .toList();
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ApiResponse<>(
                         HttpStatus.OK.value(),
                         "전체 게시글이 조회되었습니다.",
-                        new PostRetrieveResponse(posts)
+                        new PostListResponse(posts)
                 ));
     }
 
     // 게시글 상세 조회
     @GetMapping("/contents/{contentId}")
-    public ResponseEntity<ApiResponse<PostResponse>> getPostById(@PathVariable final Long contentId) {
-        PostResponse post = postService.getPostDetail(contentId);
+    public ResponseEntity<ApiResponse<PostDetailResponse>> getPostById(@PathVariable final Long contentId) {
+        PostDetailResponse post = postService.getPostDetail(contentId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ApiResponse<>(
@@ -82,14 +84,13 @@ public class PostController {
                 .body(new ApiResponse<>(HttpStatus.OK.value(), "게시글이 삭제되었습니다.", null));
     }
 
-    //게시글 검색
+    // 게시글 검색
     @GetMapping("/contents/search")
-    public ResponseEntity<ApiResponse<PostRetrieveResponse>> searchPostsByKeyword(
+    public ResponseEntity<ApiResponse<PostSearchResponse>> searchPostsByKeyword(
             @RequestParam final String keyword) {
-
-        List<PostResponse> results = postService.searchPostsByKeyword(keyword)
+        List<PostSearchItemResponse> results = postService.searchPostsByKeyword(keyword)
                 .stream()
-                .map(post -> new PostResponse(post.getId(), post.getTitle()))
+                .map(post -> new PostSearchItemResponse(post.getId(), post.getTitle()))
                 .toList();
 
         return ResponseEntity
@@ -97,10 +98,8 @@ public class PostController {
                 .body(new ApiResponse<>(
                         HttpStatus.OK.value(),
                         "키워드로 게시글 검색 성공",
-                        new PostRetrieveResponse(results)
+                        new PostSearchResponse(results)
                 ));
     }
 
-    }
-
-
+}
