@@ -1,35 +1,43 @@
 package org.sopt.assignment.domain;
 
-public class Post {
-    private long id;
+import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
+@Entity
+public class Post {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false,length= 30)
     private String title;
 
-    public Post(long id, String title) {
-        validateTitle(title);
-        this.id = id;
-        this.title = title;
+    @Column(nullable = false,updatable = false)
+    private LocalDateTime createdAt;
+
+    public Post() {
+
     }
 
-    public long getId() {
+    public Post(String title) {
+        this.title = title;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public Long getId() {
         return id;
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
-    public void updateTitle(String title) {
-        validateTitle(title);
-        this.title = title;
-    }
-    private void validateTitle(String title) {
-        if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("제목을 입력해주세요!");
-        }
-        if (title.length() > 30) {
-            throw new IllegalArgumentException("제목은 30자 이내로 작성해야 합니다!");
-        }
+    public LocalDateTime getCreatedAt() {
+        return this.createdAt;
     }
 
+    public void updateTitle(String newTitle) {
+        this.title = newTitle;
+    }
 }
