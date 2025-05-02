@@ -2,10 +2,12 @@ package org.sopt.assignment.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.sopt.assignment.domain.Post;
+import org.sopt.assignment.domain.User;
 import org.sopt.assignment.dto.response.PostDetailResponse;
 import org.sopt.assignment.dto.response.PostUpdateResponse;
 import org.sopt.assignment.exception.ErrorMessage;
 import org.sopt.assignment.repository.PostRepository;
+import org.sopt.assignment.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,9 +19,11 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
     }
 
     // 하나의 게시글 조회
@@ -35,7 +39,7 @@ public class PostService {
 
     // 게시글 작성
     @Transactional
-    public Long createPost(String title, String content) {
+    public Long createPost(String title, String content, Long userId) {
         // 중복 제목 검사
         if (postRepository.existsByTitle(title)) {
             throw new IllegalArgumentException(ErrorMessage.DUPLICATE_TITLE.getMessage());
@@ -49,7 +53,12 @@ public class PostService {
                 throw new IllegalArgumentException(ErrorMessage.SPAM_LIMIT.getMessage());
             }
         }
-        Post saved = postRepository.save(new Post(title,content));
+
+        //유저 유효성 검사
+        User user = userRepository.findById(userId)
+                .orElseThrow( ()-> new IllegalArgumentException(ErrorMessage.USER_NOT_FOUND.getMessage()));
+
+        Post saved = postRepository.save(new Post(title,content,user));
         return saved.getId();
     }
 

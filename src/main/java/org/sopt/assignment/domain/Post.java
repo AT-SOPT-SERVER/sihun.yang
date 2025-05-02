@@ -19,13 +19,19 @@ public class Post {
     @Column(nullable = false,updatable = false)
     private LocalDateTime createdAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+
     public Post() {
 
     }
 
-    public Post(String title,String content) {
+    public Post(String title,String content,User user) {
         this.title = title;
         this.content = content;
+        this.user = user;
         this.createdAt = LocalDateTime.now();
     }
 

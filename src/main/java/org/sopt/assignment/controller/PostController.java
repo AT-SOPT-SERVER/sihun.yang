@@ -24,8 +24,10 @@ public class PostController {
 
     // 게시글 작성
     @PostMapping("/contents")
-    public ResponseEntity<ApiResponse<PostCreateResponse>> createPost(@RequestBody @Valid final PostRequest postRequest) {
-        Long contentId = postService.createPost(postRequest.title(),postRequest.content());
+    public ResponseEntity<ApiResponse<PostCreateResponse>> createPost(
+            @RequestBody @Valid final PostRequest postRequest,
+            @RequestHeader("userId") Long userId) {
+        Long contentId = postService.createPost(postRequest.title(),postRequest.content(),userId);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ApiResponse<>(
