@@ -84,7 +84,7 @@ public class PostService {
         postRepository.delete(post);
     }
 
-    //게시글 검색
+    //게시글 검색 (제목 기준)
     @Transactional(readOnly = true)
     public List<Post> searchPostsByKeyword(String keyword) {
         List<Post> result = postRepository.searchByKeyword(keyword);
@@ -98,4 +98,14 @@ public class PostService {
         return result;
     }
 
+    //게시글 검색 (작성자 기준)
+    @Transactional(readOnly = true)
+    public List<Post> searchPostsByWriter(String nickname) {
+        List<Post> result = postRepository.searchByWriter(nickname);
+
+        if (result.isEmpty()) {
+            throw new EntityNotFoundException(ErrorMessage.KEYWORD_NOT_FOUND.getMessage());
+        }
+        return result;
+    }
 }

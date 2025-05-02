@@ -86,7 +86,7 @@ public class PostController {
                 .body(new ApiResponse<>(HttpStatus.OK.value(), "게시글이 삭제되었습니다.", null));
     }
 
-    //게시글 검색
+    //게시글 검색 (제목 기준)
     @GetMapping("/contents/search")
     public ResponseEntity<ApiResponse<PostSearchResponse>> searchPostsByKeyword(
             @RequestParam final String keyword) {
@@ -104,5 +104,25 @@ public class PostController {
                         new PostSearchResponse(results)
                 ));
     }
+
+    //게시글 검색 (작성자 기준)
+    @GetMapping("/contents/search/writer")
+    public ResponseEntity<ApiResponse<PostSearchResponse>> searchPostsByWriter(
+            @RequestParam final String nickname) {
+
+        List<PostSearchItemResponse> results = postService.searchPostsByWriter(nickname)
+                .stream()
+                .map(post -> new PostSearchItemResponse(post.getId(), post.getTitle()))
+                .toList();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ApiResponse<>(
+                        HttpStatus.OK.value(),
+                        "작성자 닉네임으로 게시글 검색 성공",
+                        new PostSearchResponse(results)
+                ));
+    }
+
 
 }
