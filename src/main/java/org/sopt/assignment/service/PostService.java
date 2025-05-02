@@ -55,17 +55,17 @@ public class PostService {
 
     // 게시글 수정
     @Transactional
-    public PostUpdateResponse updatePostTitle(Long id, String newTitle) {
+    public PostUpdateResponse updatePost(Long id, String title, String content) {
         Post post = getPostById(id);
-        post.updateTitle(newTitle);
-        return new PostUpdateResponse(post.getId(), post.getTitle());
+        post.update(title,content);
+        return new PostUpdateResponse(post.getId(), post.getTitle(), post.getContent());
     }
 
     // 게시글 상세 조회
     @Transactional(readOnly = true)
     public PostDetailResponse getPostDetail(Long id) {
         Post post = getPostById(id);
-        return new PostDetailResponse(post.getId(), post.getTitle());
+        return new PostDetailResponse(post.getId(), post.getTitle(),post.getContent());
     }
 
     //게시글 삭제

@@ -41,7 +41,7 @@ public class PostController {
             @PathVariable final Long contentId,
             @RequestBody @Valid final PostUpdateRequest request
     ) {
-        PostUpdateResponse updated = postService.updatePostTitle(contentId, request.title());
+        PostUpdateResponse updated = postService.updatePost(contentId, request.title(),request.content());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ApiResponse<>(HttpStatus.OK.value(), "게시글이 수정되었습니다.", updated));
