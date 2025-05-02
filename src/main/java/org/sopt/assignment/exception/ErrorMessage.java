@@ -12,12 +12,9 @@ public enum ErrorMessage {
 
     INVALID_TAG("잘못된 태그 값입니다. [BACKEND, DATABASE, INFRA] 중 하나여야 합니다."),
 
-    SERVER_ERROR("서버 내부 오류가 발생했습니다.");
+    SERVER_ERROR("서버 내부 오류가 발생했습니다."),
 
-
-
-
-
+    UNAUTHORIZED_USER("해당 게시글에 대한 권한이 없습니다.");
 
     private final String message;
 

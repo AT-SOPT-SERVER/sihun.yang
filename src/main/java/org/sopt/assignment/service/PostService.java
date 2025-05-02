@@ -65,8 +65,13 @@ public class PostService {
 
     // 게시글 수정
     @Transactional
-    public PostUpdateResponse updatePost(Long id, String title, String content, Tag tag) {
-        Post post = getPostById(id);
+    public PostUpdateResponse updatePost(Long postId, Long userId, String title, String content, Tag tag) {
+        Post post = getPostById(postId);
+
+        if (!post.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException(ErrorMessage.UNAUTHORIZED_USER.getMessage());
+        }
+
         post.update(title, content, tag);
         return new PostUpdateResponse(post.getId(), post.getTitle(), post.getContent(), post.getTag());
     }
@@ -79,9 +84,15 @@ public class PostService {
     }
 
     //게시글 삭제
+
     @Transactional
-    public void deletePostById(Long id) {
-        Post post = getPostById(id);
+    public void deletePostById(Long postId, Long userId) {
+        Post post = getPostById(postId);
+
+        if (!post.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException(ErrorMessage.UNAUTHORIZED_USER.getMessage());
+        }
+
         postRepository.delete(post);
     }
 
