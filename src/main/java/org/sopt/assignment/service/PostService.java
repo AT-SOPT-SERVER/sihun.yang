@@ -2,6 +2,7 @@ package org.sopt.assignment.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.sopt.assignment.domain.Post;
+import org.sopt.assignment.domain.Tag;
 import org.sopt.assignment.domain.User;
 import org.sopt.assignment.dto.response.PostDetailResponse;
 import org.sopt.assignment.dto.response.PostUpdateResponse;
@@ -39,7 +40,7 @@ public class PostService {
 
     // 게시글 작성
     @Transactional
-    public Long createPost(String title, String content, Long userId) {
+    public Long createPost(String title, String content, Long userId, Tag tag) {
         // 중복 제목 검사
         if (postRepository.existsByTitle(title)) {
             throw new IllegalArgumentException(ErrorMessage.DUPLICATE_TITLE.getMessage());
@@ -58,23 +59,23 @@ public class PostService {
         User user = userRepository.findById(userId)
                 .orElseThrow( ()-> new IllegalArgumentException(ErrorMessage.USER_NOT_FOUND.getMessage()));
 
-        Post saved = postRepository.save(new Post(title,content,user));
+        Post saved = postRepository.save(new Post(title,content,user,tag));
         return saved.getId();
     }
 
     // 게시글 수정
     @Transactional
-    public PostUpdateResponse updatePost(Long id, String title, String content) {
+    public PostUpdateResponse updatePost(Long id, String title, String content, Tag tag) {
         Post post = getPostById(id);
-        post.update(title,content);
-        return new PostUpdateResponse(post.getId(), post.getTitle(), post.getContent());
+        post.update(title, content, tag);
+        return new PostUpdateResponse(post.getId(), post.getTitle(), post.getContent(), post.getTag());
     }
 
     // 게시글 상세 조회
     @Transactional(readOnly = true)
     public PostDetailResponse getPostDetail(Long id) {
         Post post = getPostById(id);
-        return new PostDetailResponse(post.getId(), post.getTitle(),post.getContent(),post.getUser().getNickname());
+        return new PostDetailResponse(post.getId(), post.getTitle(),post.getContent(),post.getUser().getNickname(),post.getTag());
     }
 
     //게시글 삭제
@@ -103,6 +104,15 @@ public class PostService {
     public List<Post> searchPostsByWriter(String nickname) {
         List<Post> result = postRepository.searchByWriter(nickname);
 
+        if (result.isEmpty()) {
+            throw new EntityNotFoundException(ErrorMessage.KEYWORD_NOT_FOUND.getMessage());
+        }
+        return result;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Post> searchByTag(Tag tag) {
+        List<Post> result = postRepository.findByTag(tag);
         if (result.isEmpty()) {
             throw new EntityNotFoundException(ErrorMessage.KEYWORD_NOT_FOUND.getMessage());
         }

@@ -1,7 +1,9 @@
 package org.sopt.assignment.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.sopt.assignment.domain.Tag;
 
 public record PostRequest(
         @NotBlank(message = "제목은 비어있을 수 없습니다.")
@@ -10,5 +12,9 @@ public record PostRequest(
 
         @NotBlank(message = "내용은 비어있을 수 없습니다.")
         @Size(max = 1000, message = "내용은 1000자 이하여야 합니다.")
-        String content
+        String content,
+
+        @NotNull
+        Tag tag
+
 ) {}

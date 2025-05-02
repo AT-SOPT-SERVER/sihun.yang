@@ -1,3 +1,5 @@
 package org.sopt.assignment.dto.response;
 
-public record PostSearchItemResponse(Long contentId, String title) {}
+import org.sopt.assignment.domain.Tag;
+
+public record PostSearchItemResponse(Long contentId, String title, String writer, Tag tag) {}

@@ -8,7 +8,14 @@ public enum ErrorMessage {
 
     DUPLICATE_NICKNAME("이미 존재하는 닉네임입니다."),
 
-    USER_NOT_FOUND("해당 ID의 유저를 찾을 수 없습니다.");
+    USER_NOT_FOUND("해당 ID의 유저를 찾을 수 없습니다."),
+
+    INVALID_TAG("잘못된 태그 값입니다. [BACKEND, DATABASE, INFRA] 중 하나여야 합니다."),
+
+    SERVER_ERROR("서버 내부 오류가 발생했습니다.");
+
+
+
 
 
 

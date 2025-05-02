@@ -1,6 +1,7 @@
 package org.sopt.assignment.repository;
 
 import org.sopt.assignment.domain.Post;
+import org.sopt.assignment.domain.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,4 +24,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Post findTopByOrderByCreatedAtDesc(); // 가장 최근 게시글 조회
 
     List<Post>findAllByOrderByCreatedAtDesc();
+
+    List<Post> findByTag(Tag tag);
 }

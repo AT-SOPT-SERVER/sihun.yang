@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+import org.sopt.assignment.domain.Tag;
+
 
 @Entity
 public class Post {
@@ -17,6 +19,10 @@ public class Post {
     @Column(nullable = false, length = 1000)
     private String content;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Tag tag;
+
     @Column(nullable = false,updatable = false)
     private LocalDateTime createdAt;
 
@@ -29,10 +35,11 @@ public class Post {
 
     }
 
-    public Post(String title,String content,User user) {
+    public Post(String title,String content,User user, Tag tag) {
         this.title = title;
         this.content = content;
         this.user = user;
+        this.tag = tag;
         this.createdAt = LocalDateTime.now();
     }
 
@@ -52,12 +59,18 @@ public class Post {
     {
         return user;
     }
+
+    public Tag getTag()
+    {
+        return tag;
+    }
     public LocalDateTime getCreatedAt() {
         return this.createdAt;
     }
 
-    public void update(String newTitle,String newContent) {
+    public void update(String newTitle,String newContent, Tag newTag) {
         this.title = newTitle;
         this.content = newContent;
+        this.tag = newTag;
     }
 }

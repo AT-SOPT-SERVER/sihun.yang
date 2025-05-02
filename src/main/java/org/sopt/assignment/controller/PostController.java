@@ -9,6 +9,7 @@ import org.sopt.assignment.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.sopt.assignment.domain.Tag;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class PostController {
     public ResponseEntity<ApiResponse<PostCreateResponse>> createPost(
             @RequestBody @Valid final PostRequest postRequest,
             @RequestHeader("userId") Long userId) {
-        Long contentId = postService.createPost(postRequest.title(),postRequest.content(),userId);
+        Long contentId = postService.createPost(postRequest.title(),postRequest.content(),userId, postRequest.tag());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ApiResponse<>(
@@ -43,7 +44,7 @@ public class PostController {
             @PathVariable final Long contentId,
             @RequestBody @Valid final PostUpdateRequest request
     ) {
-        PostUpdateResponse updated = postService.updatePost(contentId, request.title(),request.content());
+        PostUpdateResponse updated = postService.updatePost(contentId, request.title(),request.content(), request.tag());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ApiResponse<>(HttpStatus.OK.value(), "게시글이 수정되었습니다.", updated));
@@ -53,7 +54,7 @@ public class PostController {
     @GetMapping("/contents")
     public ResponseEntity<ApiResponse<PostListResponse>> getAllPosts() {
         List<PostListItemResponse> posts = postService.getAllPosts().stream()
-                .map(post -> new PostListItemResponse(post.getId(), post.getTitle(),post.getUser().getNickname()))
+                .map(post -> new PostListItemResponse(post.getId(), post.getTitle(),post.getUser().getNickname(), post.getTag()))
                 .toList();
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -93,7 +94,12 @@ public class PostController {
 
         List<PostSearchItemResponse> results = postService.searchPostsByKeyword(keyword)
                 .stream()
-                .map(post -> new PostSearchItemResponse(post.getId(), post.getTitle()))
+                .map(post -> new PostSearchItemResponse(
+                        post.getId(),
+                        post.getTitle(),
+                        post.getUser().getNickname(),
+                        post.getTag()
+                ))
                 .toList();
 
         return ResponseEntity
@@ -112,7 +118,12 @@ public class PostController {
 
         List<PostSearchItemResponse> results = postService.searchPostsByWriter(nickname)
                 .stream()
-                .map(post -> new PostSearchItemResponse(post.getId(), post.getTitle()))
+                .map(post -> new PostSearchItemResponse(
+                        post.getId(),
+                        post.getTitle(),
+                        post.getUser().getNickname(),
+                        post.getTag()
+                ))
                 .toList();
 
         return ResponseEntity
@@ -122,6 +133,24 @@ public class PostController {
                         "작성자 닉네임으로 게시글 검색 성공",
                         new PostSearchResponse(results)
                 ));
+    }
+
+    //게시글 검색 (태그 기준)
+    @GetMapping("/contents/search/tag")
+    public ResponseEntity<ApiResponse<PostSearchResponse>> searchByTag(@RequestParam Tag tag) {
+        List<PostSearchItemResponse> results = postService.searchByTag(tag).stream()
+                .map(post -> new PostSearchItemResponse(
+                        post.getId(),
+                        post.getTitle(),
+                        post.getUser().getNickname(),
+                        post.getTag()
+                ))
+                .toList();
+        return ResponseEntity.ok(new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "태그로 검색 성공",
+                new PostSearchResponse(results)
+        ));
     }
 
 
