@@ -116,7 +116,7 @@ public class PostService {
         List<Post> result = postRepository.searchByWriter(nickname);
 
         if (result.isEmpty()) {
-            throw new EntityNotFoundException(ErrorMessage.KEYWORD_NOT_FOUND.getMessage());
+            throw new EntityNotFoundException(ErrorMessage.WRITER_NOT_FOUND.getMessage());
         }
         return result;
     }
@@ -125,7 +125,7 @@ public class PostService {
     public List<Post> searchByTag(Tag tag) {
         List<Post> result = postRepository.findByTag(tag);
         if (result.isEmpty()) {
-            throw new EntityNotFoundException(ErrorMessage.KEYWORD_NOT_FOUND.getMessage());
+            throw new EntityNotFoundException(ErrorMessage.TAG_NOT_FOUND.getMessage());
         }
         return result;
     }

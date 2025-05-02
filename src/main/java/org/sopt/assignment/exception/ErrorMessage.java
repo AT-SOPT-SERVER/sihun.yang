@@ -5,6 +5,8 @@ public enum ErrorMessage {
     DUPLICATE_TITLE("이미 존재하는 제목입니다."),
     SPAM_LIMIT("3분 이내에는 게시글을 다시 작성할 수 없습니다."),
     KEYWORD_NOT_FOUND("해당 키워드의 게시글이 없습니다."),
+    WRITER_NOT_FOUND("해당 작성자가 작성한 게시글이 없습니다."),
+    TAG_NOT_FOUND("해당 태그로 작성된 게시글이 없습니다."),
 
     DUPLICATE_NICKNAME("이미 존재하는 닉네임입니다."),
 
