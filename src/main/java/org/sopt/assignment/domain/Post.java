@@ -13,6 +13,7 @@ public class Post {
     @Column(nullable = false,length= 30)
     private String title;
 
+    @Column(nullable = false, length = 1000)
     private String content;
 
     @Column(nullable = false,updatable = false)
@@ -22,8 +23,9 @@ public class Post {
 
     }
 
-    public Post(String title) {
+    public Post(String title,String content) {
         this.title = title;
+        this.content = content;
         this.createdAt = LocalDateTime.now();
     }
 

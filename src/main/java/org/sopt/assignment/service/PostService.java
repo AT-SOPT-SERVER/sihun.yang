@@ -35,7 +35,7 @@ public class PostService {
 
     // 게시글 작성
     @Transactional
-    public Long createPost(String title) {
+    public Long createPost(String title, String content) {
         // 중복 제목 검사
         if (postRepository.existsByTitle(title)) {
             throw new IllegalArgumentException(ErrorMessage.DUPLICATE_TITLE.getMessage());
@@ -49,7 +49,7 @@ public class PostService {
                 throw new IllegalArgumentException(ErrorMessage.SPAM_LIMIT.getMessage());
             }
         }
-        Post saved = postRepository.save(new Post(title));
+        Post saved = postRepository.save(new Post(title,content));
         return saved.getId();
     }
 
