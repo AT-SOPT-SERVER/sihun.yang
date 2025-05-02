@@ -34,7 +34,7 @@ public class PostService {
 
     // 게시글 전체 조회
     public List<Post> getAllPosts() {
-        return postRepository.findAll();
+        return postRepository.findAllByOrderByCreatedAtDesc();
     }
 
     // 게시글 작성
@@ -74,7 +74,7 @@ public class PostService {
     @Transactional(readOnly = true)
     public PostDetailResponse getPostDetail(Long id) {
         Post post = getPostById(id);
-        return new PostDetailResponse(post.getId(), post.getTitle(),post.getContent());
+        return new PostDetailResponse(post.getId(), post.getTitle(),post.getContent(),post.getUser().getNickname());
     }
 
     //게시글 삭제

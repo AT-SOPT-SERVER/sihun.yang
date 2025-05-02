@@ -17,4 +17,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     boolean existsByTitle(String title); // 중복 제목 체크
 
     Post findTopByOrderByCreatedAtDesc(); // 가장 최근 게시글 조회
+
+    List<Post>findAllByOrderByCreatedAtDesc();
 }

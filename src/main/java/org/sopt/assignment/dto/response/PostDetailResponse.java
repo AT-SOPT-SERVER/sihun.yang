@@ -1,5 +1,5 @@
 package org.sopt.assignment.dto.response;
 
-public record PostDetailResponse(Long contentId, String title,String content) {}
+public record PostDetailResponse(Long contentId, String title,String content, String writer) {}
 
 

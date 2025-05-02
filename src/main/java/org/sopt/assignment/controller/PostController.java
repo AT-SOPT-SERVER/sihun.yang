@@ -53,7 +53,7 @@ public class PostController {
     @GetMapping("/contents")
     public ResponseEntity<ApiResponse<PostListResponse>> getAllPosts() {
         List<PostListItemResponse> posts = postService.getAllPosts().stream()
-                .map(post -> new PostListItemResponse(post.getId(), post.getTitle()))
+                .map(post -> new PostListItemResponse(post.getId(), post.getTitle(),post.getUser().getNickname()))
                 .toList();
         return ResponseEntity
                 .status(HttpStatus.OK)

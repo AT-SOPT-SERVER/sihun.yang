@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+
 @Entity
 public class Post {
     @Id
@@ -47,6 +48,10 @@ public class Post {
         return this.content;
     }
 
+    public User getUser()
+    {
+        return user;
+    }
     public LocalDateTime getCreatedAt() {
         return this.createdAt;
     }
