@@ -13,6 +13,8 @@ public class Post {
     @Column(nullable = false,length= 30)
     private String title;
 
+    private String content;
+
     @Column(nullable = false,updatable = false)
     private LocalDateTime createdAt;
 
@@ -31,6 +33,10 @@ public class Post {
 
     public String getTitle() {
         return this.title;
+    }
+
+    public String getContent() {
+        return this.content;
     }
 
     public LocalDateTime getCreatedAt() {
