@@ -9,6 +9,7 @@ import org.sopt.assignment.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.sopt.assignment.domain.Tag;
 
 import java.util.List;
 
@@ -24,8 +25,10 @@ public class PostController {
 
     // 게시글 작성
     @PostMapping("/contents")
-    public ResponseEntity<ApiResponse<PostCreateResponse>> createPost(@RequestBody @Valid final PostRequest postRequest) {
-        Long contentId = postService.createPost(postRequest.title());
+    public ResponseEntity<ApiResponse<PostCreateResponse>> createPost(
+            @RequestBody @Valid final PostRequest postRequest,
+            @RequestHeader("userId") Long userId) {
+        Long contentId = postService.createPost(postRequest.title(),postRequest.content(),userId, postRequest.tag());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ApiResponse<>(
@@ -39,9 +42,10 @@ public class PostController {
     @PatchMapping("/contents/{contentId}")
     public ResponseEntity<ApiResponse<PostUpdateResponse>> updatePost(
             @PathVariable final Long contentId,
+            @RequestHeader("userId") Long userId,
             @RequestBody @Valid final PostUpdateRequest request
     ) {
-        PostUpdateResponse updated = postService.updatePostTitle(contentId, request.title());
+        PostUpdateResponse updated = postService.updatePost(contentId, userId, request.title(), request.content(), request.tag());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ApiResponse<>(HttpStatus.OK.value(), "게시글이 수정되었습니다.", updated));
@@ -51,7 +55,7 @@ public class PostController {
     @GetMapping("/contents")
     public ResponseEntity<ApiResponse<PostListResponse>> getAllPosts() {
         List<PostListItemResponse> posts = postService.getAllPosts().stream()
-                .map(post -> new PostListItemResponse(post.getId(), post.getTitle()))
+                .map(post -> new PostListItemResponse(post.getId(), post.getTitle(),post.getUser().getNickname(), post.getTag()))
                 .toList();
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -77,21 +81,29 @@ public class PostController {
 
     //게시글 삭제
     @DeleteMapping("/contents/{contentId}")
-    public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable final Long contentId) {
-        postService.deletePostById(contentId);
+    public ResponseEntity<ApiResponse<Void>> deletePost(
+            @PathVariable final Long contentId,
+            @RequestHeader("userId") Long userId
+    ) {
+        postService.deletePostById(contentId, userId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ApiResponse<>(HttpStatus.OK.value(), "게시글이 삭제되었습니다.", null));
     }
 
-    //게시글 검색
+    //게시글 검색 (제목 기준)
     @GetMapping("/contents/search")
     public ResponseEntity<ApiResponse<PostSearchResponse>> searchPostsByKeyword(
             @RequestParam final String keyword) {
 
         List<PostSearchItemResponse> results = postService.searchPostsByKeyword(keyword)
                 .stream()
-                .map(post -> new PostSearchItemResponse(post.getId(), post.getTitle()))
+                .map(post -> new PostSearchItemResponse(
+                        post.getId(),
+                        post.getTitle(),
+                        post.getUser().getNickname(),
+                        post.getTag()
+                ))
                 .toList();
 
         return ResponseEntity
@@ -102,5 +114,48 @@ public class PostController {
                         new PostSearchResponse(results)
                 ));
     }
+
+    //게시글 검색 (작성자 기준)
+    @GetMapping("/contents/search/writer")
+    public ResponseEntity<ApiResponse<PostSearchResponse>> searchPostsByWriter(
+            @RequestParam final String nickname) {
+
+        List<PostSearchItemResponse> results = postService.searchPostsByWriter(nickname)
+                .stream()
+                .map(post -> new PostSearchItemResponse(
+                        post.getId(),
+                        post.getTitle(),
+                        post.getUser().getNickname(),
+                        post.getTag()
+                ))
+                .toList();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ApiResponse<>(
+                        HttpStatus.OK.value(),
+                        "작성자 닉네임으로 게시글 검색 성공",
+                        new PostSearchResponse(results)
+                ));
+    }
+
+    //게시글 검색 (태그 기준)
+    @GetMapping("/contents/search/tag")
+    public ResponseEntity<ApiResponse<PostSearchResponse>> searchByTag(@RequestParam Tag tag) {
+        List<PostSearchItemResponse> results = postService.searchByTag(tag).stream()
+                .map(post -> new PostSearchItemResponse(
+                        post.getId(),
+                        post.getTitle(),
+                        post.getUser().getNickname(),
+                        post.getTag()
+                ))
+                .toList();
+        return ResponseEntity.ok(new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "태그로 검색 성공",
+                new PostSearchResponse(results)
+        ));
+    }
+
 
 }

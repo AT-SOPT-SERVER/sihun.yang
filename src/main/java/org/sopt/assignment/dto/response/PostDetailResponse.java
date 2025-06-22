@@ -1,5 +1,7 @@
 package org.sopt.assignment.dto.response;
 
-public record PostDetailResponse(Long contentId, String title) {}
+import org.sopt.assignment.domain.Tag;
+
+public record PostDetailResponse(Long contentId, String title, String content, String writer, Tag tag) {}
 
 

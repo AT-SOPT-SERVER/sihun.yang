@@ -1,11 +1,22 @@
 package org.sopt.assignment.exception;
 
 public enum ErrorMessage {
-    // 게시글 관련
     POST_NOT_FOUND("해당 ID의 게시글이 존재하지 않습니다."),
     DUPLICATE_TITLE("이미 존재하는 제목입니다."),
     SPAM_LIMIT("3분 이내에는 게시글을 다시 작성할 수 없습니다."),
-    KEYWORD_NOT_FOUND("해당 키워드의 게시글이 없습니다.");
+    KEYWORD_NOT_FOUND("해당 키워드의 게시글이 없습니다."),
+    WRITER_NOT_FOUND("해당 작성자가 작성한 게시글이 없습니다."),
+    TAG_NOT_FOUND("해당 태그로 작성된 게시글이 없습니다."),
+
+    DUPLICATE_NICKNAME("이미 존재하는 닉네임입니다."),
+
+    USER_NOT_FOUND("해당 ID의 유저를 찾을 수 없습니다."),
+
+    INVALID_TAG("잘못된 태그 값입니다. [BACKEND, DATABASE, INFRA] 중 하나여야 합니다."),
+
+    SERVER_ERROR("서버 내부 오류가 발생했습니다."),
+
+    UNAUTHORIZED_USER("해당 게시글에 대한 권한이 없습니다.");
 
     private final String message;
 
