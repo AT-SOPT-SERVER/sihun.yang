@@ -28,24 +28,24 @@ public class PostController {
     public ResponseEntity<ApiResponse<PostCreateResponse>> createPost(
             @RequestBody @Valid final PostRequest postRequest,
             @RequestHeader("userId") Long userId) {
-        Long contentId = postService.createPost(postRequest.title(),postRequest.content(),userId, postRequest.tag());
+        Long postId = postService.createPost(postRequest.title(),postRequest.content(),userId, postRequest.tag());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ApiResponse<>(
                         HttpStatus.CREATED.value(),
                         "게시글이 작성되었습니다.",
-                        new PostCreateResponse(contentId)
+                        new PostCreateResponse(postId)
                 ));
     }
 
     // 게시글 수정
-    @PatchMapping("/contents/{contentId}")
+    @PatchMapping("/contents/{postId}")
     public ResponseEntity<ApiResponse<PostUpdateResponse>> updatePost(
-            @PathVariable final Long contentId,
+            @PathVariable final Long postId,
             @RequestHeader("userId") Long userId,
             @RequestBody @Valid final PostUpdateRequest request
     ) {
-        PostUpdateResponse updated = postService.updatePost(contentId, userId, request.title(), request.content(), request.tag());
+        PostUpdateResponse updated = postService.updatePost(postId, userId, request.title(), request.content(), request.tag());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ApiResponse<>(HttpStatus.OK.value(), "게시글이 수정되었습니다.", updated));
@@ -67,9 +67,9 @@ public class PostController {
     }
 
     // 게시글 상세 조회
-    @GetMapping("/contents/{contentId}")
-    public ResponseEntity<ApiResponse<PostDetailResponse>> getPostById(@PathVariable final Long contentId) {
-        PostDetailResponse post = postService.getPostDetail(contentId);
+    @GetMapping("/contents/{postId}")
+    public ResponseEntity<ApiResponse<PostDetailResponse>> getPostById(@PathVariable final Long postId) {
+        PostDetailResponse post = postService.getPostDetail(postId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ApiResponse<>(
@@ -80,12 +80,12 @@ public class PostController {
     }
 
     //게시글 삭제
-    @DeleteMapping("/contents/{contentId}")
+    @DeleteMapping("/contents/{postId}")
     public ResponseEntity<ApiResponse<Void>> deletePost(
-            @PathVariable final Long contentId,
+            @PathVariable final Long postId,
             @RequestHeader("userId") Long userId
     ) {
-        postService.deletePostById(contentId, userId);
+        postService.deletePostById(postId, userId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ApiResponse<>(HttpStatus.OK.value(), "게시글이 삭제되었습니다.", null));

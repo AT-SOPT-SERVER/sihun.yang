@@ -17,3 +17,4 @@ public record PostUpdateRequest(
         @NotNull
         Tag tag
 ) {}
+
